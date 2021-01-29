@@ -251,17 +251,14 @@ public class DownloadTracker implements  DownloadHelper.Callback{
   public void toggleDownload(
           FragmentManager fragmentManager, MediaItem mediaItem, RenderersFactory renderersFactory) {
     Download download = downloads.get(checkNotNull(mediaItem.playbackProperties).uri);
-
+    android.util.Log.d(TAG, "toggleDownload: "+mediaItem.playbackProperties.uri);
     if (download != null) {
       android.util.Log.d(TAG, "toggleDownload: not null");
       DownloadService.sendRemoveDownload(
               context, PlayerDownloadService.class, download.request.id, /* foreground= */ false);
     } else {
       android.util.Log.d(TAG, "toggleDownload:  null");
-      if (startDownloadDialogHelper != null) {
-        startDownloadDialogHelper.release();
-      }
-      startDownloadDialogHelper =
+
               new StartDownloadDialogHelper(
                       fragmentManager,
                       DownloadHelper.forMediaItem(
@@ -458,6 +455,7 @@ public class DownloadTracker implements  DownloadHelper.Callback{
 
     @Override
     public void onPrepared(@NonNull DownloadHelper helper) {
+      android.util.Log.d(TAG, "onPrepared: helper prepared");
       @Nullable Format format = getFirstFormatWithDrmInitData(helper);
       if (format == null) {
         onDownloadPrepared(helper);
